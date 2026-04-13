@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conviva AI — Unit Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0e0f0e;--surface:#161714;--s2:#1d1e1b;--s3:#252622;
+  --bd:rgba(255,255,255,0.07);--bdh:rgba(255,255,255,0.14);
+  --accent:#c8f060;--adim:rgba(200,240,96,0.11);--adim2:rgba(200,240,96,0.05);
+  --tx:#f0f0ec;--txs:#8a8b84;--txt:#4e4f49;
+  --err:#ff6b5b;--errdim:rgba(255,107,91,0.1);
+  --ok:#4ade80;--okdim:rgba(74,222,128,0.1);
+  --r:10px;--rl:16px;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+/* ── LAYOUT ── */
+.shell{display:grid;grid-template-columns:256px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--bd);padding:1.75rem 1.25rem;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:0}
+.main{padding:2.5rem 2.5rem 7rem;max-width:800px}
+
+/* ── LOGO ── */
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:2rem}
+.lm{width:30px;height:30px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.ln{font-size:14px;font-weight:600;letter-spacing:-.02em}
+.lt{font-size:11px;color:var(--txs);margin-top:1px}
+
+/* ── SIDEBAR NAV ── */
+.nl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--txt);margin:0 0 .5rem .5rem}
+.ni{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background .12s,color .12s;margin-bottom:1px;color:var(--txs);font-size:13px;user-select:none}
+.ni:hover{background:var(--s2);color:var(--tx)}
+.ni.active{background:var(--adim);color:var(--accent)}
+.ni.done .nd{background:var(--ok)}
+.ni.done{color:var(--txs)}
+.nd{width:6px;height:6px;border-radius:50%;background:var(--bdh);flex-shrink:0;transition:background .2s}
+.ni.active .nd{background:var(--accent)}
+.nn{font-family:var(--mono);font-size:10px;color:var(--txt);min-width:16px}
+
+.sfooter{margin-top:auto;padding-top:1.25rem;border-top:1px solid var(--bd)}
+.upill{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--txs)}
+.upill strong{display:block;color:var(--tx);font-size:13px;margin-bottom:1px}
+
+/* ── PROGRESS ── */
+.pb{height:2px;background:var(--bd);border-radius:2px;margin-bottom:2rem;overflow:hidden}
+.pf{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:5%}
+
+/* ── SECTION ── */
+.sec{display:none}.sec.active{display:block}
+.sh{margin-bottom:1.75rem}
+.sl{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.st{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1.15}
+.sd{font-size:14px;color:var(--txs);margin-top:7px;line-height:1.55}
+
+/* ── FIELDS ── */
+.f{margin-bottom:1.25rem}
+.fl{font-size:12.5px;font-weight:500;color:var(--txs);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.req{color:var(--accent);font-size:10px}
+.fh{font-size:11.5px;color:var(--txt);margin-top:4px;line-height:1.5}
+input[type=text],input[type=url],input[type=tel],input[type=number],input[type=time],input[type=email],textarea,select{
+  width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);
+  font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 13px;outline:none;transition:border-color .15s,background .15s
+}
+input::placeholder,textarea::placeholder{color:var(--txt)}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);background:var(--s3)}
+textarea{resize:vertical;min-height:80px}
+select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234e4f49' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select option{background:var(--s2)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.fr4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+
+/* ── CHECKLIST ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:7px}
+.cg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px}
+.ci{display:flex;align-items:center;gap:9px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:9px 12px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none}
+.ci:hover{border-color:var(--bdh);background:var(--s3)}
+.ci.on{border-color:var(--accent);background:var(--adim2)}
+.cb{width:17px;height:17px;border:1.5px solid var(--txt);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:border-color .12s,background .12s}
+.ci.on .cb{border-color:var(--accent);background:var(--accent)}
+.ck{opacity:0;transition:opacity .1s}
+.ci.on .ck{opacity:1}
+.clabel{font-size:13px;color:var(--txs);line-height:1.3}
+.ci.on .clabel{color:var(--tx)}
+
+/* ── RADIO ── */
+.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px}
+.ri{display:flex;align-items:center;gap:9px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:9px 12px;cursor:pointer;transition:border-color .12s,background .12s;user-select:none}
+.ri:hover{border-color:var(--bdh)}
+.ri.on{border-color:var(--accent);background:var(--adim2)}
+.rd{width:17px;height:17px;border:1.5px solid var(--txt);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:border-color .12s}
+.ri.on .rd{border-color:var(--accent)}
+.ri2{width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .1s}
+.ri.on .ri2{opacity:1}
+.rlabel{font-size:13px;color:var(--txs)}
+.ri.on .rlabel{color:var(--tx)}
+
+/* ── MEDIA BLOCK ── */
+.mb{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:13px 14px;margin-bottom:8px}
+.mb-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.mb-icon{width:26px;height:26px;background:var(--s3);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mb-title{font-size:13px;font-weight:500;color:var(--tx)}
+.mb-sub{font-size:11.5px;color:var(--txs);margin-top:1px}
+.mb input{font-family:var(--mono);font-size:12px}
+.mb-add{display:flex;gap:7px;margin-top:7px}
+.mb-add input{flex:1}
+.mb-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.linktag{display:inline-flex;align-items:center;gap:5px;background:var(--adim);border:1px solid rgba(200,240,96,0.18);border-radius:6px;padding:3px 9px;font-size:11.5px;color:var(--accent);font-family:var(--mono)}
+.linktag button{background:none;border:none;color:var(--accent);cursor:pointer;padding:0;font-size:13px;line-height:1;opacity:.6}
+.linktag button:hover{opacity:1}
+
+/* ── NOTICE ── */
+.notice{background:var(--adim2);border:1px solid rgba(200,240,96,0.13);border-radius:var(--r);padding:11px 13px;font-size:13px;color:var(--txs);display:flex;gap:9px;align-items:flex-start;margin-bottom:1.25rem;line-height:1.5}
+.ni2{color:var(--accent);flex-shrink:0;font-size:14px;margin-top:1px}
+.notice.warn{background:var(--errdim);border-color:rgba(255,107,91,0.18)}
+.notice.warn .ni2{color:var(--err)}
+.notice.auto{background:var(--okdim);border-color:rgba(74,222,128,0.15)}
+.notice.auto .ni2{color:var(--ok)}
+
+
+
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--bd);margin:1.75rem 0}
+.dlabel{display:flex;align-items:center;gap:10px;margin:1.75rem 0 1rem;font-size:10.5px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--txt)}
+.dlabel::before,.dlabel::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+/* ── INLINE ADD ROW ── */
+.addrow{display:flex;gap:8px;margin-top:6px}
+.addrow input{flex:1}
+
+/* ── FAQ ROW ── */
+.faqrow{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:12px;margin-bottom:7px}
+.faqrow .fl{margin-bottom:4px}
+.faqrow textarea{min-height:60px;margin-top:5px}
+
+/* ── BTN ── */
+.brow{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--bd)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;border:none}
+.ghost{background:transparent;color:var(--txs);border:1px solid var(--bd)}
+.ghost:hover{border-color:var(--bdh);color:var(--tx)}
+.primary{background:var(--accent);color:#0e0f0e}
+.primary:hover{background:#d4f572;transform:translateY(-1px)}
+.primary:active{transform:translateY(0)}
+.primary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.outline{background:transparent;color:var(--accent);border:1px solid rgba(200,240,96,0.28)}
+.outline:hover{background:var(--adim)}
+.sm{font-size:12.5px;padding:7px 13px}
+
+/* ── SUMMARY CARD ── */
+.scard{background:var(--s2);border:1px solid var(--bd);border-radius:var(--rl);padding:1.25rem}
+.srow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--bd)}
+.srow:last-child{border-bottom:none}
+.sk{color:var(--txs)}
+.sv{color:var(--tx);font-weight:500;text-align:right;max-width:55%}
+
+/* ── SUCCESS ── */
+.success{text-align:center;padding:3.5rem 2rem}
+.sico{width:60px;height:60px;background:var(--okdim);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.stitle{font-size:26px;font-weight:600;letter-spacing:-.03em;margin-bottom:.6rem}
+.ssub{font-size:14px;color:var(--txs);max-width:400px;margin:0 auto 1.75rem;line-height:1.6}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--bdh);border-radius:3px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:1.5rem 1rem 5rem}
+  .fr,.fr3,.fr4{grid-template-columns:1fr}
+  .cg,.rg{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="lm">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="6" stroke="#0e0f0e" stroke-width="2"/>
+        <path d="M5 8h6M8 5v6" stroke="#0e0f0e" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div><div class="ln">Conviva AI</div><div class="lt">Unit Onboarding</div></div>
+  </div>
+
+  <div class="nl">Sections</div>
+  <nav id="nav">
+    <div class="ni active" data-s="0" onclick="go(0)"><span class="nn">01</span><div class="nd"></div>Unit basics</div>
+    <div class="ni" data-s="1" onclick="go(1)"><span class="nn">02</span><div class="nd"></div>Access & check-in</div>
+    <div class="ni" data-s="2" onclick="go(2)"><span class="nn">03</span><div class="nd"></div>Amenities</div>
+    <div class="ni" data-s="3" onclick="go(3)"><span class="nn">04</span><div class="nd"></div>House rules</div>
+    <div class="ni" data-s="4" onclick="go(4)"><span class="nn">05</span><div class="nd"></div>Videos & guides</div>
+    <div class="ni" data-s="5" onclick="go(5)"><span class="nn">06</span><div class="nd"></div>FAQs</div>
+    <div class="ni" data-s="6" onclick="go(6)"><span class="nn">07</span><div class="nd"></div>Review & submit</div>
+    <div class="ni" data-s="8" onclick="go(8)" id="portfolio-nav" style="display:none"><span class="nn">◉</span><div class="nd"></div>Portfolio <span id="portfolio-count" style="background:var(--adim);color:var(--accent);font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px">0</span></div>
+  </nav>
+
+  <div class="sfooter">
+    <div class="upill">
+      <strong id="sid-unit">—</strong>
+      <span id="sid-status">Draft · not submitted</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ═════════════════════════════════════════════ -->
+<main class="main">
+<div class="pb"><div class="pf" id="prog"></div></div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 0 — UNIT BASICS
+══════════════════════════════════════════════════════ -->
+<div class="sec active" id="s0">
+  <div class="sh">
+    <div class="sl">Step 01 / 07</div>
+    <h1 class="st">Unit basics</h1>
+    <p class="sd">Start with your Airbnb listing URL — Conviva uses it to set up your agent. Then fill in the details below.</p>
+  </div>
+
+  <div class="f">
+    <div class="fl">Airbnb listing URL <span class="req">recommended</span></div>
+    <input type="url" id="listing-url" placeholder="https://www.airbnb.com/rooms/...">
+    <div class="fh">Used by Conviva to read your listing data and set up the agent. Paste your Airbnb link — other platforms coming soon.</div>
+  </div>
+
+  <hr>
+
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Unit name <span class="req">required</span></div>
+      <input type="text" id="unit-name" placeholder="e.g. Murjan 2 – UP01 / Ocean View Studio 4B" oninput="updateSidebar()">
+    </div>
+    <div class="f">
+      <div class="fl">Building / tower name</div>
+      <input type="text" id="building" placeholder="e.g. Cayan Tower, Opera Grand, Index Tower">
+    </div>
+  </div>
+
+  <div class="fr3">
+    <div class="f">
+      <div class="fl">Unit / apt number</div>
+      <input type="text" id="unit-no" placeholder="e.g. 2301, UP01, 4B">
+    </div>
+    <div class="f">
+      <div class="fl">Floor</div>
+      <input type="text" id="floor" placeholder="e.g. 23rd, Upper Penthouse">
+    </div>
+    <div class="f">
+      <div class="fl">Community / area</div>
+      <select id="area">
+        <option value="">Select area</option>
+        <optgroup label="Waterfront">
+          <option>JBR – Jumeirah Beach Residence</option>
+          <option>Dubai Marina</option>
+          <option>Palm Jumeirah</option>
+          <option>Bluewaters Island</option>
+          <option>La Mer / Jumeirah 1</option>
+        </optgroup>
+        <optgroup label="Central">
+          <option>Downtown Dubai / Burj Khalifa</option>
+          <option>Business Bay</option>
+          <option>DIFC</option>
+          <option>City Walk</option>
+          <option>Sheikh Zayed Road</option>
+        </optgroup>
+        <optgroup label="Residential">
+          <option>Dubai Hills Estate</option>
+          <option>Arabian Ranches</option>
+          <option>Jumeirah Village Circle (JVC)</option>
+          <option>Jumeirah Lakes Towers (JLT)</option>
+          <option>Al Barsha</option>
+          <option>Mirdif</option>
+          <option>Silicon Oasis</option>
+          <option>Sports City</option>
+        </optgroup>
+        <optgroup label="Other">
+          <option>Al Quoz</option>
+          <option>Deira</option>
+          <option>Bur Dubai</option>
+          <option>Other (specify in notes)</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+
+  <div class="fr4">
+    <div class="f">
+      <div class="fl">Property type</div>
+      <select id="prop-type">
+        <option value="">Type</option>
+        <option>Apartment</option>
+        <option>Studio</option>
+        <option>Penthouse</option>
+        <option>Villa</option>
+        <option>Townhouse</option>
+        <option>Hotel apartment</option>
+        <option>Serviced apartment</option>
+      </select>
+    </div>
+    <div class="f">
+      <div class="fl">Bedrooms</div>
+      <select id="beds">
+        <option value="">Beds</option>
+        <option>Studio</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+      </select>
+    </div>
+    <div class="f">
+      <div class="fl">Bathrooms</div>
+      <select id="baths">
+        <option value="">Baths</option>
+        <option>1</option><option>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3+</option>
+      </select>
+    </div>
+    <div class="f">
+      <div class="fl">Max guests</div>
+      <input type="number" id="max-guests" placeholder="e.g. 6" min="1" max="30">
+    </div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Google Maps link</div>
+    <input type="url" id="maps-link" placeholder="https://maps.app.goo.gl/...">
+    <div class="fh">Share the pin so the AI can give guests exact directions and send to map apps</div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Short unit description <span class="req">for AI context</span></div>
+    <textarea id="unit-desc" placeholder="Brief description the AI uses when introducing the unit to guests. E.g. 'Upper penthouse in Murjan 2 JBR with private balcony overlooking the pool and sea views...'"></textarea>
+  </div>
+
+  <!-- Duplicate warning — shown if unit name already submitted -->
+  <div id="duplicate-warning" style="display:none;margin-bottom:1rem">
+    <div class="notice warn">
+      <span class="ni2">⚠</span>
+      <div><strong style="color:var(--tx);display:block;margin-bottom:3px">This unit may already be submitted</strong>
+      A unit with a similar name was already added this session. Check the <button onclick="go(8)" style="background:none;border:none;color:#ff6b5b;text-decoration:underline;cursor:pointer;font-size:13px;padding:0">portfolio list</button> before continuing to avoid duplicates.</div>
+    </div>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" id="portfolio-btn" style="display:none" onclick="go(8)">View portfolio →</button>
+    <button class="btn primary" onclick="checkDuplicateAndContinue()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 1 — ACCESS & CHECK-IN
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s1">
+  <div class="sh">
+    <div class="sl">Step 02 / 07</div>
+    <h1 class="st">Access & check-in</h1>
+    <p class="sd">How guests enter the property. Be specific — the AI replicates exactly what you write here.</p>
+  </div>
+
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Check-in from</div>
+      <input type="time" id="ci-time" value="16:00">
+    </div>
+    <div class="f">
+      <div class="fl">Check-out by</div>
+      <input type="time" id="co-time" value="11:00">
+    </div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Early check-in fee (AED/hour)</div>
+    <input type="number" id="early-fee" placeholder="e.g. 150" style="max-width:180px">
+  </div>
+
+  <!-- Building inherit notice — shown automatically if same building detected -->
+  <div id="building-inherit-notice" style="display:none;margin-bottom:1.25rem">
+    <div class="notice auto">
+      <span class="ni2">✓</span>
+      <div><strong style="color:var(--tx);display:block;margin-bottom:3px">Same building as a previous unit — shared info pre-filled</strong>
+      Building-level details from <strong id="inherit-building-name">—</strong> have been copied automatically: entry instructions, pool hours, gym notes, emergency contacts. <strong style="color:var(--tx)">WiFi is unit-specific</strong> — please fill that in separately for this unit.</div>
+    </div>
+  </div>
+
+  <div class="dlabel">Door access system</div>
+  <div class="f">
+    <div class="fl">Primary access method <span class="req">required</span></div>
+    <div class="rg">
+      <div class="ri on" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Keyless app + card</span></div>
+      <div class="ri" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Physical key only</span></div>
+      <div class="ri" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Key + building fob</span></div>
+      <div class="ri" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Reception check-in</span></div>
+      <div class="ri" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Host meets guest</span></div>
+      <div class="ri" onclick="selR(this,'access')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Smart lock / code (PMS)</span></div>
+    </div>
+    <div class="fh">Smart lock code sync is handled automatically via PMS integration — no manual setup needed here.</div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Access cards / items given to guest</div>
+    <div class="cg">
+      <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Apartment access card</span></div>
+      <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Pool / amenity card</span></div>
+      <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Gym card</span></div>
+      <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Parking fob / card</span></div>
+      <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Building lobby fob</span></div>
+      <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Physical key</span></div>
+    </div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Lost card/key replacement fee (AED)</div>
+    <input type="number" id="card-fee" placeholder="e.g. 300" style="max-width:180px">
+  </div>
+
+  <div class="f">
+    <div class="fl">Step-by-step building entry instructions</div>
+    <textarea id="entry-steps" placeholder="Describe exactly how a guest enters from the street to the apartment door. Include intercom, lobby, lift, floor, etc.&#10;&#10;e.g. 1. At main entrance, press CONCIERGE on intercom → select PLAZA RECEPTION → security will open gate&#10;2. Take lifts on the right, press floor 23&#10;3. Turn left out of lift, apartment UP01 is the second door on the right"></textarea>
+    <div class="fh">The AI uses this verbatim when guests ask how to get in</div>
+  </div>
+
+  <div class="dlabel">Parking</div>
+  <div class="f">
+    <div class="fl">Parking available?</div>
+    <div class="rg">
+      <div class="ri on" onclick="selR(this,'park')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Free dedicated space</span></div>
+      <div class="ri" onclick="selR(this,'park')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Paid building parking</span></div>
+      <div class="ri" onclick="selR(this,'park')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Street / public parking</span></div>
+      <div class="ri" onclick="selR(this,'park')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">No parking</span></div>
+    </div>
+  </div>
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Parking bay / space number</div>
+      <input type="text" id="park-bay" placeholder="e.g. Bay 727, Level B2">
+    </div>
+    <div class="f">
+      <div class="fl">Paid parking rate (AED/hr)</div>
+      <input type="number" id="park-rate" placeholder="e.g. 10">
+    </div>
+  </div>
+
+  <div class="dlabel">WiFi</div>
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Network name (SSID)</div>
+      <input type="text" id="wifi-ssid" placeholder="e.g. LuxOasisHolidayHomes_5G">
+    </div>
+    <div class="f">
+      <div class="fl">Password</div>
+      <input type="text" id="wifi-pass" placeholder="e.g. Luxoasis2024$">
+    </div>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(0)">← Back</button>
+    <button class="btn primary" onclick="go(2)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 2 — AMENITIES
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s2">
+  <div class="sh">
+    <div class="sl">Step 03 / 07</div>
+    <h1 class="st">Amenities</h1>
+    <p class="sd">Tick everything available in or at the property. This is the full Airbnb-style amenity set.</p>
+  </div>
+
+  <div class="dlabel">Essentials</div>
+  <div class="cg">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">WiFi</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Air conditioning</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Heating</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Bed linens & towels</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Hot water</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Blackout curtains</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Safety deposit box</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smoke detector</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Carbon monoxide detector</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">First aid kit</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Fire extinguisher</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Iron + ironing board</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Hangers & wardrobe</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Hair dryer</span></div>
+  </div>
+
+  <div class="dlabel">Kitchen & appliances</div>
+  <div class="cg">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Fully equipped kitchen</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Cooking essentials</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Refrigerator</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Microwave</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Oven</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Kettle</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Toaster</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Nespresso / coffee machine</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Dishwasher</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Washing machine</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Washer + dryer combo</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Blender</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Juicer</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Air fryer</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">BBQ grill</span></div>
+  </div>
+
+  <div class="dlabel">Entertainment & tech</div>
+  <div class="cg">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smart TV</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Netflix included</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">OSN / cable TV</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Projector</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Work desk</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Monitor / second screen</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Bluetooth speaker</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Game console</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Board games</span></div>
+  </div>
+
+  <div class="dlabel">Outdoor & building facilities</div>
+  <div class="cg">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Private balcony</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Private terrace</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Private pool</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Shared pool</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Community gym (free)</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Paid gym on-site</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Sauna</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Jacuzzi</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Free parking space</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">EV charging</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Beach access</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Beach club access</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Concierge desk</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Kids play area</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Supermarket in/near building</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Pharmacy nearby</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Rooftop access</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Restaurant in building</span></div>
+  </div>
+
+  <div class="dlabel">Baby & family</div>
+  <div class="cg2">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby cot / crib</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">High chair</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby monitor</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby bath</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Steriliser</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby toys</span></div>
+  </div>
+
+  <div class="f" style="margin-top:1.25rem">
+    <div class="fl">Pool hours</div>
+    <input type="text" id="pool-hrs" placeholder="e.g. 11:00 AM – 10:00 PM">
+  </div>
+  <div class="f">
+    <div class="fl">Gym access notes</div>
+    <textarea id="gym-notes" placeholder="Who can use it, when, what they need to bring (ID, booking confirmation, etc.)&#10;e.g. Community gym in front of SADAF 2. Bring phone showing booking confirmation + passport copy. Access granted per day." style="min-height:70px"></textarea>
+  </div>
+  <div class="f">
+    <div class="fl">Baby cot linen fee (AED)</div>
+    <input type="number" id="cot-fee" placeholder="e.g. 100 — leave blank if included" style="max-width:200px">
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(1)">← Back</button>
+    <button class="btn primary" onclick="go(3)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 3 — HOUSE RULES
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s3">
+  <div class="sh">
+    <div class="sl">Step 04 / 07</div>
+    <h1 class="st">House rules</h1>
+    <p class="sd">Tick all rules that apply. UAE legal context is auto-added by the AI where relevant.</p>
+  </div>
+
+  <div class="notice"><span class="ni2">✦</span><span>Rules marked with a ★ automatically include UAE legal context in the AI's responses to guests.</span></div>
+
+  <div class="cg">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">★ No smoking inside</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smoking on balcony OK</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">★ No parties / events</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No unregistered guests</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No pets</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Pets allowed</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">★ Passport copy required</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">★ DTCM registration req.</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No alcohol on premises</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Must download keyless app</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No shoes indoors</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Appropriate dress (pool area)</span></div>
+  </div>
+
+  <div class="fr" style="margin-top:1.25rem">
+    <div class="f">
+      <div class="fl">Quiet hours — from</div>
+      <input type="time" id="quiet-from" value="22:00">
+    </div>
+    <div class="f">
+      <div class="fl">Quiet hours — until</div>
+      <input type="time" id="quiet-to" value="08:00">
+    </div>
+  </div>
+
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Smoking fine (AED)</div>
+      <input type="number" id="smoke-fine" placeholder="e.g. 2500">
+    </div>
+    <div class="f">
+      <div class="fl">Security deposit required?</div>
+      <select id="deposit">
+        <option>No deposit (standard)</option>
+        <option>Deposit for groups only</option>
+        <option>Always collect deposit</option>
+        <option>Deposit amount at discretion</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="f">
+    <div class="fl">Waste / garbage disposal instructions</div>
+    <textarea id="garbage" placeholder="e.g. Each floor has a waste chute outside the apartment door. Use closed plastic bags. Recycling bins on ground level." style="min-height:70px"></textarea>
+  </div>
+
+  <div class="f">
+    <div class="fl">Additional custom rules</div>
+    <textarea id="custom-rules" placeholder="Any other property-specific rules not covered above..."></textarea>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(2)">← Back</button>
+    <button class="btn primary" onclick="go(4)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 4 — VIDEOS & GUIDES
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s4">
+  <div class="sh">
+    <div class="sl">Step 05 / 07</div>
+    <h1 class="st">Videos & guides</h1>
+    <p class="sd">Link all instruction materials. The AI sends these directly to guests the moment they ask. You can add multiple links per category.</p>
+  </div>
+
+  <div class="notice"><span class="ni2">✦</span><span>Share Google Drive files set to <strong>"Anyone with the link can view"</strong>. YouTube links also work. Add as many links as needed per category — the AI picks the right one contextually.</span></div>
+
+  <!-- DOOR ACCESS -->
+  <div class="mb">
+    <div class="mb-head">
+      <div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><circle cx="9" cy="6.5" r="1" fill="var(--accent)"/><path d="M2 6.5h6" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg></div>
+      <div><div class="mb-title">Door access</div><div class="mb-sub">Opening & closing with app, card, key</div></div>
+    </div>
+    <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'door-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'door-links')">+ Add</button></div>
+    <div class="mb-links" id="door-links"></div>
+  </div>
+
+  <!-- PARKING -->
+  <div class="mb">
+    <div class="mb-head">
+      <div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><path d="M4 9.5V3.5h3a2 2 0 010 4H4" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><div class="mb-title">Parking guide</div><div class="mb-sub">How to find & enter the parking bay</div></div>
+    </div>
+    <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'park-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'park-links')">+ Add</button></div>
+    <div class="mb-links" id="park-links"></div>
+  </div>
+
+  <!-- BUILDING ENTRY -->
+  <div class="mb">
+    <div class="mb-head">
+      <div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><path d="M2 11V5l4.5-3L11 5v6M5 11V8h3v3" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><div class="mb-title">Building entry</div><div class="mb-sub">Intercom, lobby, lift, floor instructions</div></div>
+    </div>
+    <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'entry-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'entry-links')">+ Add</button></div>
+    <div class="mb-links" id="entry-links"></div>
+  </div>
+
+  <!-- KEYLESS APP SETUP -->
+  <div class="mb">
+    <div class="mb-head">
+      <div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><rect x="4" y="3" width="5" height="7" rx="1" stroke="var(--accent)" stroke-width="1"/><path d="M6 9h1" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg></div>
+      <div><div class="mb-title">Keyless app setup</div><div class="mb-sub">Download, install, and configure guide</div></div>
+    </div>
+    <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'app-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'app-links')">+ Add</button></div>
+    <div class="mb-links" id="app-links"></div>
+  </div>
+
+  <!-- CUSTOM / DYNAMIC APPLIANCE SECTIONS -->
+  <div class="dlabel">Appliances & in-unit guides</div>
+  <div id="appliance-blocks">
+    <div class="mb">
+      <div class="mb-head">
+        <div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><path d="M3 4h7M3 7h5M3 10h3" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg></div>
+        <div style="flex:1"><input type="text" placeholder="Appliance or guide name (e.g. Washing machine, AC remote, Safe/locker)" style="background:transparent;border:none;border-bottom:1px solid var(--bd);border-radius:0;padding:2px 0;font-size:13px;font-weight:500;color:var(--tx)"></div>
+      </div>
+      <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'appl-0')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'appl-0')">+ Add</button></div>
+      <div class="mb-links" id="appl-0"></div>
+    </div>
+  </div>
+  <button class="btn ghost sm" onclick="addApplianceBlock()" style="margin-top:6px">+ Add another guide</button>
+
+  <!-- SAFETY & EMERGENCY -->
+  <div class="dlabel">Safety & emergency</div>
+  <div class="mb" style="margin-bottom:8px">
+    <div class="mb-head"><div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="var(--accent)" stroke-width="1"/><path d="M6.5 4v3M6.5 9v.5" stroke="var(--accent)" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="mb-title">Fire extinguisher location</div></div></div>
+    <div class="addrow"><input type="url" placeholder="Photo or video link" onkeydown="addLinkOnEnter(event,this,'fire-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'fire-links')">+ Add</button></div>
+    <div class="mb-links" id="fire-links"></div>
+  </div>
+  <div class="mb">
+    <div class="mb-head"><div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><path d="M2.5 10L6.5 3l4 7H2.5z" stroke="var(--accent)" stroke-width="1" stroke-linejoin="round" fill="none"/></svg></div><div><div class="mb-title">Evacuation map</div></div></div>
+    <div class="addrow"><input type="url" placeholder="Floor plan or evacuation map link" onkeydown="addLinkOnEnter(event,this,'evac-links')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'evac-links')">+ Add</button></div>
+    <div class="mb-links" id="evac-links"></div>
+  </div>
+
+  <div class="dlabel">Emergency contacts</div>
+  <div class="fr">
+    <div class="f"><div class="fl">Host / ops WhatsApp</div><input type="tel" id="host-wa" placeholder="+971 52 760 4550"></div>
+    <div class="f"><div class="fl">Maintenance team</div><input type="tel" id="maint-tel" placeholder="+971..."></div>
+  </div>
+  <div class="fr">
+    <div class="f"><div class="fl">Nearest hospital</div><input type="text" id="hospital" placeholder="e.g. Emirates Hospital Clinics – Dubai Marina"></div>
+    <div class="f"><div class="fl">Nearest pharmacy + hours</div><input type="text" id="pharmacy" placeholder="e.g. Life Pharmacy JBR, 8AM–2AM, 04 451 7202"></div>
+  </div>
+
+  <div class="dlabel">Room photos (Google Drive links)</div>
+  <div class="notice"><span class="ni2">✦</span><span>The agent uses these to describe the apartment to guests and send photos on request. Set Drive files to "Anyone with the link can view".</span></div>
+  <div class="f"><div class="fl">Living room</div><input type="url" id="img-living" placeholder="https://drive.google.com/file/d/..."></div>
+  <div class="f"><div class="fl">Master bedroom</div><input type="url" id="img-bedroom" placeholder="https://drive.google.com/file/d/..."></div>
+  <div class="f"><div class="fl">View from balcony</div><input type="url" id="img-balcony" placeholder="https://drive.google.com/file/d/..."></div>
+  <div class="f"><div class="fl">Kitchen / dining area</div><input type="url" id="img-kitchen" placeholder="https://drive.google.com/file/d/..."></div>
+  <div class="f"><div class="fl">Working area / desk</div><input type="url" id="img-desk" placeholder="https://drive.google.com/file/d/..."></div>
+
+  <div class="dlabel">Check-out checklist</div>
+  <div class="notice"><span class="ni2">✦</span><span>The agent sends this to guests the day before or morning of check-out. Write exactly what you want guests to do before leaving.</span></div>
+  <div class="f">
+    <textarea id="checkout-checklist" placeholder="e.g.&#10;☑ Turn off all lights and electronic devices&#10;☑ Lock all windows and leave the door unlocked for cleaners&#10;☑ Check all power outlets — no chargers left behind&#10;☑ Place access cards back on the table&#10;☑ Lower or turn off the AC&#10;☑ Let us know when you've left so we can send the cleaner" style="min-height:140px"></textarea>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(3)">← Back</button>
+    <button class="btn primary" onclick="go(5)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 5 — FAQs & INVENTORY
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s5">
+  <div class="sh">
+    <div class="sl">Step 06 / 07</div>
+    <h1 class="st">FAQs & inventory</h1>
+    <p class="sd">Tick the FAQ categories relevant to your unit and fill in your specific policies. The agent answers automatically from these — the more you tick, the less it escalates.</p>
+  </div>
+
+  <div class="notice auto"><span class="ni2">✓</span><span>All ticked categories load pre-written answers automatically. You only need to fill in your specific details (fees, times, policies) where indicated.</span></div>
+
+  <!-- NEIGHBOURHOOD TEMPLATE -->
+  <div class="f">
+    <div class="fl">Neighbourhood template <span class="req">select one</span></div>
+    <div class="rg">
+      <div class="ri on" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">JBR</span></div>
+      <div class="ri" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Dubai Marina</span></div>
+      <div class="ri" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Downtown / Burj</span></div>
+      <div class="ri" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Palm Jumeirah</span></div>
+      <div class="ri" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Business Bay</span></div>
+      <div class="ri" onclick="selR(this,'faq-tmpl')"><div class="rd"><div class="ri2"></div></div><span class="rlabel">Generic Dubai</span></div>
+    </div>
+    <div class="fh">Loads pre-written local tips, distances, attractions, and transport info for your area automatically.</div>
+  </div>
+
+  <!-- ── CHECK-IN & CHECK-OUT ── -->
+  <div class="dlabel">Check-in & check-out</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Early check-in possible?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Late check-out possible?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">How does check-in work?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">How does check-out work?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I leave luggage?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Peak season check-in</span></div>
+  </div>
+  <div class="fr">
+    <div class="f"><div class="fl">Early check-in fee (AED/hr)</div><input type="text" placeholder="e.g. 150 AED per hour"></div>
+    <div class="f"><div class="fl">Late check-out fee</div><input type="text" placeholder="e.g. 150 AED per hour / subject to availability"></div>
+  </div>
+
+  <!-- ── PAYMENTS ── -->
+  <div class="dlabel">Payments & deposits</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Is a deposit required?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Why did the price change?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Cleaning fee explanation</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Booking.com payment questions</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I change my booking dates?</span></div>
+  </div>
+  <div class="f"><div class="fl">Deposit policy (your specific wording)</div><textarea placeholder="e.g. No deposit required for families. Deposit may apply for groups during peak season." style="min-height:60px"></textarea></div>
+
+  <!-- ── CLEANING & HOUSEKEEPING ── -->
+  <div class="dlabel">Cleaning & housekeeping</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Mid-stay cleaning available?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Are extra towels available?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Linen change policy</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I bring a housemaid?</span></div>
+  </div>
+  <div class="f"><div class="fl">Mid-stay cleaning fee (AED)</div><input type="text" placeholder="e.g. 250 AED — includes fresh linen and full clean. 24hrs notice required." style=""></div>
+
+  <!-- ── HOUSE RULES ── -->
+  <div class="dlabel">House rules & policies</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smoking policy</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No parties rule</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I bring visitors?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Why do you need my passport?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Garbage disposal</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Noise monitor in apartment</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I view before booking?</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Dubai etiquette / dress code</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Ramadan rules</span></div>
+  </div>
+
+  <!-- ── AMENITIES & APPLIANCES ── -->
+  <div class="dlabel">Amenities & appliances</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">WiFi speed & provider</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Is tap water safe to drink?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Netflix / TV subscription</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Safety deposit box location</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Iron & ironing board location</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Washing machine not filling</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">What's included on arrival?</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">WiFi troubleshooting</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">AC not cooling / remote</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">TV / remote how-to</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smoke detector beeping</span></div>
+  </div>
+  <div class="f"><div class="fl">What's included on arrival (welcome pack)</div><textarea placeholder="e.g. Water bottles, tea, coffee capsules, toiletries, fresh towels on bed..." style="min-height:60px"></textarea></div>
+  <div class="f"><div class="fl">Netflix / streaming policy</div><textarea placeholder="e.g. No shared Netflix account. Guests use own account and log out at check-out. TV has du cable with sports channels." style="min-height:60px"></textarea></div>
+
+  <!-- ── TROUBLESHOOTING & MAINTENANCE ── -->
+  <div class="dlabel">Troubleshooting & maintenance</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No hot water</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">AC not working</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">No water at all</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Cockroach / pest</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Water leak / flooding</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Cannot open door</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smoke detector beeping</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Microwave / oven not working</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Low water pressure</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Electricity / lights out</span></div>
+  </div>
+
+  <!-- ── POOL & GYM ── -->
+  <div class="dlabel">Pool, gym & building</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Pool hours & access</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Is pool heated?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Separate men/women pool times?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Gym access & hours</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Beach club access</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Sauna / jacuzzi access</span></div>
+  </div>
+
+  <!-- ── BABY & FAMILY ── -->
+  <div class="dlabel">Baby & family</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby cot available?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">High chair available?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Supermarket for baby food nearby</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Blackout curtains in bedroom?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Kettle, steriliser, baby items?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Child seat for taxi (Hala Kids)</span></div>
+  </div>
+  <div class="f"><div class="fl">Baby cot linen fee (AED) — leave blank if free</div><input type="text" placeholder="e.g. 100 AED — provided by cleaning company on arrival" style="max-width:320px"></div>
+
+  <!-- ── TRANSPORT ── -->
+  <div class="dlabel">Transport & getting around</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Taxi from airport</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Tips for taking a taxi</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Car rental recommendation</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Nearest metro station</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Food delivery (Deliveroo / Talabat)</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">SIM card / eSIM for tourists</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Where to print documents</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">ATM / currency exchange nearby</span></div>
+  </div>
+
+  <!-- ── PARKING ── -->
+  <div class="dlabel">Parking</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">How to access parking</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I leave car after check-out?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Paid parking info</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Two cars / extra parking</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">EV charging available</span></div>
+  </div>
+
+  <!-- ── LUGGAGE ── -->
+  <div class="dlabel">Luggage & BaggageTaxi</div>
+  <div class="cg" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I store luggage here?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">BaggageTaxi service info</span></div>
+  </div>
+  <div class="f"><div class="fl">BaggageTaxi discount code (if applicable)</div><input type="text" placeholder="e.g. LUX074 — 5% off at baggagetaxi.com"></div>
+
+  <!-- ── BOOKING & DOCUMENTS ── -->
+  <div class="dlabel">Booking & documents</div>
+  <div class="cg" style="margin-bottom:1.25rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I send my documents here?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Can I change booking dates?</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Visa / booking confirmation letter</span></div>
+  </div>
+
+  <!-- ── PARTNER OFFERS ── -->
+  <div class="dlabel">Partner offers & discount codes</div>
+  <div id="offers-list">
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:12px;margin-bottom:7px">
+      <div class="fr3">
+        <div><div class="fl" style="font-size:11px;margin-bottom:4px">Partner name</div><input type="text" placeholder="e.g. BaggageTaxi"></div>
+        <div><div class="fl" style="font-size:11px;margin-bottom:4px">Discount code</div><input type="text" placeholder="e.g. LUX074"></div>
+        <div><div class="fl" style="font-size:11px;margin-bottom:4px">Discount amount</div><input type="text" placeholder="e.g. 5% off"></div>
+      </div>
+      <div style="margin-top:8px"><div class="fl" style="font-size:11px;margin-bottom:4px">Booking link</div><input type="url" placeholder="https://..."></div>
+    </div>
+  </div>
+  <button class="btn ghost sm" onclick="addOffer()" style="margin-top:4px">+ Add partner offer</button>
+
+  <!-- ── CUSTOM FAQs ── -->
+  <div class="dlabel">Custom FAQs — specific to this unit</div>
+  <div class="notice"><span class="ni2">✦</span><span>Only add questions that aren't covered above — things unique to your building, access system, or local area.</span></div>
+  <div id="faq-list">
+    <div class="faqrow">
+      <div class="fl" style="font-size:11px;margin-bottom:3px;color:var(--txt)">Question</div>
+      <input type="text" placeholder="e.g. How do I access the beach club?">
+      <div class="fl" style="font-size:11px;margin-top:10px;margin-bottom:3px;color:var(--txt)">Answer</div>
+      <textarea placeholder="e.g. Use the white pool access card at the gate next to Grandiose. Mention you are a guest of [unit name]." style="min-height:60px"></textarea>
+    </div>
+  </div>
+  <button class="btn ghost sm" onclick="addFAQ()" style="margin-top:6px">+ Add custom FAQ</button>
+
+  <!-- ── INVENTORY ── -->
+  <div class="dlabel">Inventory — tick what's in the unit</div>
+  <div class="notice"><span class="ni2">✦</span><span>The agent uses this to answer guest questions like "is there a hairdryer?" or "do you have a baby cot?" instantly and accurately.</span></div>
+
+  <div class="f"><div class="fl" style="font-size:12px;color:var(--accent)">Living room & dining area</div></div>
+  <div class="cg2" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Sofa / sofa bed</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Smart TV</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Dining table & chairs</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Nespresso machine</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">WiFi router</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Work desk</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Game set / board games</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Baby cot</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">High chair</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Noise monitor (Minut)</span></div>
+  </div>
+
+  <div class="f"><div class="fl" style="font-size:12px;color:var(--accent)">Kitchen</div></div>
+  <div class="cg2" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Fridge / freezer</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Oven & hob</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Microwave</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Kettle</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Toaster</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Pots, pans & utensils</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Plates, glasses, mugs</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Washing machine</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Dishwasher</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Blender</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Air fryer</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Cooking oil, salt, basics</span></div>
+  </div>
+
+  <div class="f"><div class="fl" style="font-size:12px;color:var(--accent)">Bedroom(s)</div></div>
+  <div class="cg2" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">King / queen bed</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Wardrobe & hangers</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Blackout curtains</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">AC unit & remote</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Safety deposit box</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Iron & ironing board</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">TV in bedroom</span></div>
+  </div>
+
+  <div class="f"><div class="fl" style="font-size:12px;color:var(--accent)">Bathroom(s)</div></div>
+  <div class="cg2" style="margin-bottom:1rem">
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Towels provided</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Hair dryer</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Toiletries / shampoo</span></div>
+    <div class="ci on" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Hot water (water heater switch)</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Bathtub</span></div>
+    <div class="ci" onclick="tog(this)"><div class="cb"><svg class="ck" width="9" height="7" viewBox="0 0 9 7"><path d="M1 3.5l2.3 2.3L8 1" stroke="#0e0f0e" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></div><span class="clabel">Washing powder provided</span></div>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(4)">← Back</button>
+    <button class="btn primary" onclick="go(6)">Review →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 6 — REVIEW & SUBMIT
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s6">
+  <div class="sh">
+    <div class="sl">Step 07 / 07</div>
+    <h1 class="st">Review & submit</h1>
+    <p class="sd">Check everything before submitting. Once sent, Conviva will build your agent and confirm via WhatsApp.</p>
+  </div>
+
+  <div class="scard" id="review-card">
+    <div class="srow"><span class="sk">Unit name</span><span class="sv" id="rv-unit">—</span></div>
+    <div class="srow"><span class="sk">Building</span><span class="sv" id="rv-building">—</span></div>
+    <div class="srow"><span class="sk">Area</span><span class="sv" id="rv-area">—</span></div>
+    <div class="srow"><span class="sk">Property type</span><span class="sv" id="rv-type">—</span></div>
+    <div class="srow"><span class="sk">Beds / Baths / Max guests</span><span class="sv" id="rv-rooms">—</span></div>
+    <div class="srow"><span class="sk">Check-in / Check-out</span><span class="sv" id="rv-times">—</span></div>
+    <div class="srow"><span class="sk">Access method</span><span class="sv" id="rv-access">—</span></div>
+    <div class="srow"><span class="sk">FAQ template</span><span class="sv">JBR — 89 FAQs loaded</span></div>
+    <div class="srow"><span class="sk">Recommendations</span><span class="sv" style="color:var(--ok)">Auto-generated from location</span></div>
+  </div>
+
+  <div class="f" style="margin-top:1.5rem">
+    <div class="fl">Your name <span class="req">required</span></div>
+    <input type="text" id="sub-name" placeholder="Full name">
+  </div>
+  <div class="fr">
+    <div class="f">
+      <div class="fl">Agent WhatsApp number <span class="req">required</span></div>
+      <input type="tel" id="sub-wa" placeholder="+971...">
+      <div class="fh">The number guests will message. Must be connected to 360dialog.</div>
+    </div>
+    <div class="f">
+      <div class="fl">Your email</div>
+      <input type="email" id="sub-email" placeholder="you@company.com">
+    </div>
+  </div>
+
+  <div class="notice" style="margin-top:.75rem"><span class="ni2">✦</span><span>After submission: data is structured and written to the unit's Google Sheet knowledge base → Chatwoot inbox created → automated QA test runs (5 guest scenarios) → you receive WhatsApp confirmation when live.</span></div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(5)">← Back</button>
+    <button class="btn primary" onclick="doSubmit()">Submit unit ✓</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STEP 8 — PORTFOLIO (unit list)
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s8">
+  <div class="sh">
+    <div class="sl">Portfolio overview</div>
+    <h1 class="st">Units added</h1>
+    <p class="sd">All units added this session. Review before final submission — check for duplicates, missing info, or units that need editing.</p>
+  </div>
+
+  <div id="portfolio-empty" style="text-align:center;padding:3rem 1rem;color:var(--txt);font-size:14px">
+    No units added yet. Go back and fill in your first unit.
+  </div>
+
+  <div id="portfolio-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem"></div>
+
+  <div class="notice" id="portfolio-duplicate-alert" style="display:none">
+    <span class="ni2" style="color:var(--err)">⚠</span>
+    <span style="color:var(--err)"><strong style="display:block;margin-bottom:2px">Possible duplicate detected</strong>Two or more units have very similar names. Please check before submitting.</span>
+  </div>
+
+  <div class="brow">
+    <button class="btn ghost" onclick="go(0)">+ Add another unit</button>
+    <button class="btn primary" onclick="go(6)">Review & submit all →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SUCCESS
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s-success">
+  <div class="success">
+    <div class="sico"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 13l5.5 5.5L22 7" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2 class="stitle" style="color:var(--ok)">Unit submitted ✓</h2>
+    <p class="ssub">Conviva is building your AI agent and will confirm via WhatsApp once live — typically within 24 hours.</p>
+
+    <div class="scard" style="max-width:460px;margin:0 auto 1.5rem">
+      <div class="srow"><span class="sk">Unit just submitted</span><span class="sv" id="suc-unit">—</span></div>
+      <div class="srow"><span class="sk">Status</span><span class="sv" style="color:var(--accent)">Building agent…</span></div>
+      <div class="srow"><span class="sk">Total units submitted</span><span class="sv" id="suc-count">1</span></div>
+    </div>
+
+    <!-- SUBMITTED UNITS LIST -->
+    <div style="max-width:460px;margin:0 auto 1.5rem;text-align:left">
+      <div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--txt);margin-bottom:.6rem">Units submitted this session</div>
+      <div id="units-submitted-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <!-- SAME BUILDING NOTICE — shown if next unit same building -->
+    <div id="same-building-notice" style="display:none;max-width:460px;margin:0 auto 1.25rem">
+      <div class="notice auto" style="text-align:left">
+        <span class="ni2">✓</span>
+        <div><strong style="color:var(--tx);display:block;margin-bottom:3px">Same building detected</strong>
+        Building-level info from <strong id="same-building-name">—</strong> will be pre-filled automatically. You only need to fill in unit-specific details (unit number, floor, parking bay).</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn primary" onclick="addAnother()">+ Add another unit</button>
+      <button class="btn ghost" onclick="finishAll()">All done ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ALL DONE
+══════════════════════════════════════════════════════ -->
+<div class="sec" id="s-done">
+  <div class="success">
+    <div class="sico"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M4 13l5.5 5.5L22 7" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2 class="stitle">All units submitted</h2>
+    <p class="ssub">Your portfolio is being set up. Conviva will confirm each unit via WhatsApp as agents go live.</p>
+
+    <div class="scard" style="max-width:460px;margin:0 auto 1.5rem;text-align:left">
+      <div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--txt);padding-bottom:8px;border-bottom:1px solid var(--bd);margin-bottom:8px">All submitted units</div>
+      <div id="units-final-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <p style="font-size:13px;color:var(--txt);margin-top:1rem">Need to add more units later? Use the same link anytime.</p>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+let cur = 0;
+const totalSteps = 7;
+let applianceCount = 1;
+let submittedUnits = [];
+let buildingCache = {};
+
+function go(n) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  let target;
+  if (n === 99) target = 's-success';
+  else if (n === 98) target = 's-done';
+  else if (n === 8) target = 's8';
+  else target = 's' + n;
+  document.getElementById(target).classList.add('active');
+  document.querySelectorAll('#nav .ni').forEach((el,i) => {
+    el.classList.remove('active','done');
+    if (i < n && n < totalSteps) el.classList.add('done');
+    if (i === n) el.classList.add('active');
+  });
+  const pct = Math.max(Math.round((n/(totalSteps-1))*100), 5);
+  document.getElementById('prog').style.width = (n >= totalSteps ? 100 : pct) + '%';
+  cur = n;
+  window.scrollTo(0,0);
+  if (n === 6) buildReview();
+  if (n === 8) renderPortfolio();
+}
+
+function tog(el) { el.classList.toggle('on'); }
+
+function selR(el, group) {
+  el.closest('.rg').querySelectorAll('.ri').forEach(r => r.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function updateSidebar() {
+  const v = document.getElementById('unit-name').value;
+  document.getElementById('sid-unit').textContent = v || '—';
+}
+
+/* DUPLICATE CHECK */
+function checkDuplicateAndContinue() {
+  const unitName = document.getElementById('unit-name').value.trim().toLowerCase();
+  const unitNo = document.getElementById('unit-no').value.trim().toLowerCase();
+  if (!unitName) { go(1); return; }
+
+  const isDuplicate = submittedUnits.some(u => {
+    const sameName = u.name.toLowerCase() === unitName;
+    const sameNo = unitNo && u.unitNo.toLowerCase() === unitNo;
+    return sameName || sameNo;
+  });
+
+  const warn = document.getElementById('duplicate-warning');
+  if (isDuplicate) {
+    warn.style.display = 'block';
+    // Don't block — just warn. VA can still continue if it's intentional.
+  } else {
+    warn.style.display = 'none';
+    go(1);
+  }
+}
+
+/* BUILDING INHERITANCE — WiFi excluded (unit-specific) */
+function checkBuildingMatch() {
+  const building = document.getElementById('building').value.trim();
+  if (!building || !buildingCache[building]) return;
+  const cached = buildingCache[building];
+  const notice = document.getElementById('building-inherit-notice');
+  if (notice) {
+    notice.style.display = 'flex';
+    document.getElementById('inherit-building-name').textContent = building;
+  }
+  // WiFi deliberately NOT inherited — each unit has its own credentials
+  const fill = (id, val) => { const el = document.getElementById(id); if (el && !el.value && val) el.value = val; };
+  fill('entry-steps', cached.entry_instructions);
+  fill('pool-hrs', cached.pool_hours);
+  fill('gym-notes', cached.gym_notes);
+  fill('host-wa', cached.host_wa);
+  fill('hospital', cached.hospital);
+  fill('pharmacy', cached.pharmacy);
+  fill('checkout-checklist', cached.checkout_checklist);
+}
+
+/* LINK MANAGEMENT */
+function addLink(input, listId) {
+  const url = input.value.trim();
+  if (!url) return;
+  const list = document.getElementById(listId);
+  const tag = document.createElement('span');
+  tag.className = 'linktag';
+  const short = url.length > 40 ? url.substring(0,38)+'…' : url;
+  tag.innerHTML = short + ` <button onclick="this.parentElement.remove()" title="Remove">×</button>`;
+  list.appendChild(tag);
+  input.value = '';
+}
+
+function addLinkOnEnter(e, input, listId) {
+  if (e.key === 'Enter') { e.preventDefault(); addLink(input, listId); }
+}
+
+/* DYNAMIC BLOCKS */
+function addApplianceBlock() {
+  const id = 'appl-' + applianceCount++;
+  const div = document.createElement('div');
+  div.className = 'mb';
+  div.style.marginBottom = '8px';
+  div.innerHTML = `<div class="mb-head"><div class="mb-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x=".5" y=".5" width="12" height="12" rx="2" stroke="var(--accent)" stroke-width="1"/><path d="M3 4h7M3 7h5M3 10h3" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg></div><div style="flex:1"><input type="text" placeholder="Appliance or guide name" style="background:transparent;border:none;border-bottom:1px solid var(--bd);border-radius:0;padding:2px 0;font-size:13px;font-weight:500;color:var(--tx)"></div></div>
+  <div class="addrow"><input type="url" placeholder="Paste Google Drive or YouTube link" onkeydown="addLinkOnEnter(event,this,'${id}')"><button class="btn outline sm" onclick="addLink(this.previousElementSibling,'${id}')">+ Add</button></div>
+  <div class="mb-links" id="${id}"></div>`;
+  document.getElementById('appliance-blocks').appendChild(div);
+}
+
+function addFAQ() {
+  const div = document.createElement('div');
+  div.className = 'faqrow';
+  div.innerHTML = `<div class="fl" style="font-size:11px;margin-bottom:3px;color:var(--txt)">Question</div>
+  <input type="text" placeholder="Question">
+  <div class="fl" style="font-size:11px;margin-top:10px;margin-bottom:3px;color:var(--txt)">Answer</div>
+  <textarea placeholder="Answer" style="min-height:60px"></textarea>`;
+  document.getElementById('faq-list').appendChild(div);
+}
+
+function addOffer() {
+  const div = document.createElement('div');
+  div.style.cssText = 'background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:12px;margin-bottom:7px';
+  div.innerHTML = `<div class="fr3"><div><div class="fl" style="font-size:11px;margin-bottom:4px">Partner name</div><input type="text" placeholder="Partner name"></div><div><div class="fl" style="font-size:11px;margin-bottom:4px">Discount code</div><input type="text" placeholder="Discount code"></div><div><div class="fl" style="font-size:11px;margin-bottom:4px">Discount amount</div><input type="text" placeholder="e.g. 10% off"></div></div><div style="margin-top:8px"><div class="fl" style="font-size:11px;margin-bottom:4px">Booking link</div><input type="url" placeholder="https://..."></div>`;
+  document.getElementById('offers-list').appendChild(div);
+}
+
+/* REVIEW */
+function buildReview() {
+  const g = id => document.getElementById(id)?.value || '—';
+  const sel = id => { const el=document.getElementById(id); return el?.options[el?.selectedIndex]?.text || '—'; };
+  document.getElementById('rv-unit').textContent = g('unit-name');
+  document.getElementById('rv-building').textContent = g('building') || '—';
+  document.getElementById('rv-area').textContent = sel('area');
+  document.getElementById('rv-type').textContent = sel('prop-type');
+  document.getElementById('rv-rooms').textContent = `${sel('beds')} bed / ${sel('baths')} bath / max ${g('max-guests')} guests`;
+  document.getElementById('rv-times').textContent = `${g('ci-time')} – ${g('co-time')}`;
+  const accessEl = document.querySelector('#s1 .ri.on .rlabel');
+  document.getElementById('rv-access').textContent = accessEl?.textContent || '—';
+}
+
+/* SUBMIT */
+async function doSubmit() {
+  const name = document.getElementById('sub-name').value.trim();
+  const wa = document.getElementById('sub-wa').value.trim();
+  if (!name || !wa) { alert('Please fill in your name and WhatsApp number.'); return; }
+
+  const g = id => document.getElementById(id)?.value || '';
+  const sel = id => { const el=document.getElementById(id); return el?.options[el?.selectedIndex]?.text || ''; };
+  const getLinks = (id) => [...(document.getElementById(id)?.querySelectorAll('.linktag')||[])].map(x=>x.textContent.replace('×','').trim()).join(', ');
+  const amenities = [...document.querySelectorAll('#s2 .ci.on .clabel')].map(x=>x.textContent).join(', ');
+  const houseRules = [...document.querySelectorAll('#s3 .ci.on .clabel')].map(x=>x.textContent).join(', ');
+  const accessCards = [...document.querySelectorAll('#s1 .cg .ci.on .clabel')].map(x=>x.textContent).join(', ');
+  const inventory = [...document.querySelectorAll('#s5 .ci.on .clabel')].map(x=>x.textContent).join(', ');
+  const accessMethod = document.querySelector('#s1 .rg .ri.on .rlabel')?.textContent || '';
+  const offerBlocks = document.querySelectorAll('#offers-list > div');
+  const offers = [...offerBlocks].map(b=>{const i=b.querySelectorAll('input');return i[0]?.value?`${i[0].value} (${i[1]?.value})`:''}).filter(Boolean).join(' | ');
+  const faqRows = document.querySelectorAll('#faq-list .faqrow');
+  const customFaqs = [...faqRows].map(r=>{const q=r.querySelector('input')?.value;const a=r.querySelector('textarea')?.value;return q?`Q: ${q} | A: ${a}`:''}).filter(Boolean).join(' || ');
+
+  const unitName = g('unit-name') || 'Unnamed unit';
+  const building = g('building');
+  const unitNo = g('unit-no');
+  const area = sel('area');
+  const beds = sel('beds');
+
+  // Map exactly to Google Sheet column names — Units tab
+  const payload = {
+    'Unit Name':                      unitName,
+    'Building Name':                  building,
+    'Floor':                          g('floor'),
+    'Unit Number':                    unitNo,
+    'Google Maps Link':               g('maps-link'),
+    'Coordinates':                    '',
+    'Access Cards':                   accessCards,
+    'Building Access Instructions':   g('entry-steps'),
+    'Check-in Time':                  g('ci-time'),
+    'Check-out Time':                 g('co-time'),
+    'Max Guests':                     g('max-guests'),
+    'Bedrooms':                       beds,
+    'Bathrooms':                      sel('baths'),
+    'House Rules':                    houseRules,
+    'Emergency Contacts':             `Host: ${g('host-wa')} | Hospital: ${g('hospital')} | Pharmacy: ${g('pharmacy')} | Maintenance: ${g('maint-tel')}`,
+    'Wifi Information':               `SSID: ${g('wifi-ssid')} | Password: ${g('wifi-pass')}`,
+    'Parking Instructions':           `${accessMethod} | Bay: ${g('park-bay')} | Rate: ${g('park-rate')} AED/hr`,
+    'Amenities Guide':                amenities,
+    'Appliance Instructions':         getLinks('appl-0'),
+    'Unit/Apartment Door Access':     `${accessMethod} | Door video: ${getLinks('door-links')}`,
+    'Garbage Instructions':           g('garbage'),
+    'Safety & Emergency':             `Fire: ${getLinks('fire-links')} | Evacuation: ${getLinks('evac-links')}`,
+    'Local Amenities':                area,
+    'Building Amenities':             `Pool: ${g('pool-hrs')} | Gym: ${g('gym-notes')}`,
+    'Paid Parking':                   g('park-rate') ? `${g('park-rate')} AED/hr` : '',
+    'Check-Out Checklist':            g('checkout-checklist'),
+    'Baggage Solution':               offers,
+    'Dining Recommendation':          '',
+    'Neighborhood and Local Attractions': area,
+    'Exclusive Offers':               offers,
+    'Gym':                            g('gym-notes'),
+    'Paid Parking.1':                 g('park-rate') ? `${g('park-rate')} AED/hr` : '',
+    'Netflix Subscription':           g('netflix-policy') || '',
+    'Image of the Living Room':       g('img-living'),
+    'Image of View from the Balcony': g('img-balcony'),
+    'Image of View from Dining Area': g('img-kitchen'),
+    'Image of Master bedroom':        g('img-bedroom'),
+    'Image of Working Area':          g('img-desk'),
+    'Airbnb URL':                     g('listing-url'),
+    'Inventory':                      inventory,
+    'Custom FAQs':                    customFaqs,
+    'FAQ Template':                   document.querySelector('#s5 .ri.on .rlabel')?.textContent || '',
+    'Operator Name':                  name,
+    'Agent WhatsApp':                 wa,
+    'Operator Email':                 g('sub-email'),
+    'Submitted At':                   new Date().toISOString()
+  };
+
+  // ── POST TO GOOGLE SHEET ──────────────────────────
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzj9jOYE7-kk5VLJ9KaAuaN3_hOAS6NNaxlXFeORaKfHOjwEtlviddmh1JPn1q8Lqyj/exec';
+
+  const submitBtn = document.querySelector('#s6 .btn.primary');
+  if (submitBtn) { submitBtn.textContent = 'Saving…'; submitBtn.disabled = true; }
+
+  try {
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { console.log('Submitted'); }
+
+  if (submitBtn) { submitBtn.textContent = 'Submit unit ✓'; submitBtn.disabled = false; }
+  // ─────────────────────────────────────────────────
+
+  submittedUnits.push({ name: unitName, building, unitNo, area, beds, status: 'submitted' });
+
+  if (building) {
+    buildingCache[building] = {
+      entry_instructions: g('entry-steps'),
+      pool_hours: g('pool-hrs'),
+      gym_notes: g('gym-notes'),
+      host_wa: g('host-wa'),
+      hospital: g('hospital'),
+      pharmacy: g('pharmacy'),
+      checkout_checklist: g('checkout-checklist'),
+    };
+  }
+
+  const portfolioNav = document.getElementById('portfolio-nav');
+  const portfolioBtn = document.getElementById('portfolio-btn');
+  if (portfolioNav) portfolioNav.style.display = 'flex';
+  if (portfolioBtn) portfolioBtn.style.display = 'inline-flex';
+  document.getElementById('portfolio-count').textContent = submittedUnits.length;
+  document.getElementById('suc-unit').textContent = unitName;
+  document.getElementById('suc-count').textContent = submittedUnits.length;
+
+  const notice = document.getElementById('same-building-notice');
+  if (building) { notice.style.display = 'block'; document.getElementById('same-building-name').textContent = building; }
+  else { notice.style.display = 'none'; }
+
+  renderList('units-submitted-list');
+  go(99);
+}
+
+/* PORTFOLIO RENDER */
+function renderPortfolio() {
+  const list = document.getElementById('portfolio-list');
+  const empty = document.getElementById('portfolio-empty');
+  const dupAlert = document.getElementById('portfolio-duplicate-alert');
+  if (!list) return;
+
+  if (submittedUnits.length === 0) {
+    empty.style.display = 'block';
+    list.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  list.style.display = 'flex';
+
+  // Check for duplicates
+  const names = submittedUnits.map(u => u.name.toLowerCase());
+  const hasDuplicate = names.some((n, i) => names.indexOf(n) !== i);
+  if (dupAlert) dupAlert.style.display = hasDuplicate ? 'flex' : 'none';
+
+  list.innerHTML = submittedUnits.map((u, i) => `
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:13px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:3px">${u.name}</div>
+          <div style="font-size:12px;color:var(--txt)">
+            ${u.building ? u.building + ' · ' : ''}${u.unitNo ? 'Unit ' + u.unitNo + ' · ' : ''}${u.area || ''}${u.beds ? ' · ' + u.beds + ' bed' : ''}
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span style="font-size:11px;color:var(--ok);background:var(--okdim);padding:3px 9px;border-radius:10px">✓ Submitted</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderList(targetId) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  el.innerHTML = submittedUnits.map(u => `
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:9px 13px">
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--tx)">${u.name}</div>
+        <div style="font-size:11px;color:var(--txt);margin-top:1px">${u.building ? u.building + (u.unitNo ? ' · ' + u.unitNo : '') : 'No building specified'}</div>
+      </div>
+      <div style="font-size:11px;color:var(--ok);background:var(--okdim);padding:3px 9px;border-radius:10px">✓ Done</div>
+    </div>`).join('');
+}
+
+/* ADD ANOTHER */
+function addAnother() {
+  const keep = ['sub-name','sub-wa','sub-email'];
+  document.querySelectorAll('input[type=text],input[type=url],input[type=tel],input[type=number],input[type=email],textarea').forEach(el => {
+    if (!keep.includes(el.id)) el.value = '';
+  });
+  const ci = document.getElementById('ci-time');
+  const co = document.getElementById('co-time');
+  if (ci) ci.value = '16:00';
+  if (co) co.value = '11:00';
+  document.querySelectorAll('.linktag').forEach(el => el.remove());
+  document.getElementById('sid-unit').textContent = '—';
+
+  // Set up building autocomplete from cache
+  const buildings = Object.keys(buildingCache);
+  if (buildings.length > 0) {
+    const buildingInput = document.getElementById('building');
+    if (buildingInput) {
+      buildingInput.setAttribute('list', 'building-suggestions');
+      let dl = document.getElementById('building-suggestions');
+      if (!dl) { dl = document.createElement('datalist'); dl.id = 'building-suggestions'; document.body.appendChild(dl); }
+      dl.innerHTML = buildings.map(b => `<option value="${b}">`).join('');
+      buildingInput.oninput = checkBuildingMatch;
+    }
+  }
+  go(0);
+}
+
+/* FINISH */
+function finishAll() {
+  renderList('units-final-list');
+  go(98);
+}
+</script>
+</body>
+</html>
